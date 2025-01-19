@@ -48,6 +48,8 @@ if(BUILD_TESTING)
     test/tortoisebot_action_client.hpp
     test/tortoisebot_action_client.cpp
     test/tortoisebot_action_server_test.cpp
+	test/odom_listener.hpp
+	test/odom_listener.cpp
   )
   set(TEST_DEPS
     tortoisebot_action_server_lib
@@ -55,7 +57,7 @@ if(BUILD_TESTING)
   set(TEST_TARGET_NAME
     ${PROJECT_NAME}_test
   )
-  set(TEST_TIMEOUT 40)
+  set(TEST_TIMEOUT 120)
   if(ENABLE_STANDALONE_GTEST)
     ament_add_gtest(${TEST_TARGET_NAME} ${TEST_SOURCES} TIMEOUT ${TEST_TIMEOUT})
   else()

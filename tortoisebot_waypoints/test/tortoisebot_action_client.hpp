@@ -9,10 +9,12 @@
 #include "rclcpp/rclcpp.hpp"
 #include "rclcpp_action/rclcpp_action.hpp"
 
+#include <atomic>
 #include <functional>
 #include <future>
 #include <memory>
-#include <atomic>
+#include <optional>
+#include <string>
 
 namespace TortoisebotWaypoints {
 
@@ -21,10 +23,15 @@ public:
   using WaypointAction = tortoisebot_waypoints::action::WaypointAction;
   using GoalHandleWaypointAction =
       rclcpp_action::ClientGoalHandle<WaypointAction>;
+  using WaypointActionWrappedResultFuture =
+      std::shared_future<GoalHandleWaypointAction::WrappedResult>;
 
-  TortoisebotActionClient();
+  TortoisebotActionClient(
+      const std::string &node_name = kNodeName,
+      const rclcpp::NodeOptions &options = rclcpp::NodeOptions());
 
-  WaypointAction::Result::SharedPtr send_goal(const WaypointAction::Goal &goal);
+  std::optional<WaypointActionWrappedResultFuture>
+  send_goal(const WaypointAction::Goal &goal);
 
 private:
   void goal_response_callback(
@@ -40,8 +47,6 @@ private:
   static constexpr char kActionName[]{"tortoisebot_as"};
 
   rclcpp_action::Client<WaypointAction>::SharedPtr action_client_;
-  std::atomic<bool> is_goal_done_{false};
-  WaypointAction::Result::SharedPtr result_{nullptr};
 }; // class TortoisebotActionClient
 
 } // namespace TortoisebotWaypoints
